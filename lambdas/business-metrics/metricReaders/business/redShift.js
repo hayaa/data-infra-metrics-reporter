@@ -1,11 +1,6 @@
 const {Client} = require('pg');
 const QUERIES = require('./queries');
 
-process.env.HOST='redshift-prod-int.naturalint.com';
-process.env.PORT='5439';
-process.env.DATABASE='warehouse';
-process.env.USER='heart_beat';
-process.env.PASSWORD='HBv123456@';
 
 const {
 	HOST: host,
