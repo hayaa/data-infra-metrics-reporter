@@ -1,0 +1,19 @@
+{
+  "name": "business-metrics",
+  " version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "zip": "zip -r  etl-sla-metrics.zip . -x \"*.zip\" ",
+    "push": "aws lambda update-function-code --region us-east-1 --function-name etl-sla-metrics --zip-file fileb://etl-sla-metrics.zip"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "influx": "^5.5.1",
+    "lodash": "^4.17.11",
+    "pg": "^7.14.0",
+    "promise-mysql": "^3.3.2"
+  }
+}
