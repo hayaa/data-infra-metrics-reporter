@@ -21,10 +21,9 @@ group by qry_type ;
 
 
 
-
 module.exports = {
-  impressions,
-  clickouts,
-  earnings,
-  aggregations
+    impressions: impressions,
+    clickouts:  clickouts,
+    earnings: earnings,
+    aggregations: aggregations
 };
