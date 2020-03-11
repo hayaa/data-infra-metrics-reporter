@@ -14,21 +14,14 @@ from  dlk_visitor_funnel_dwh_production.earnings_inputs where forminstances_save
 `;
 
 const aggregations = `
-select qry_type as entitiy, DATEDIFF(day, max(date), current_date) as value, 'DAILY_AGG' + upper(qry_type) + '_FRESHNESS' from v_daily_aggregates
+select qry_type as entity, DATEDIFF(day, max(date), current_date) as value, 'DAILY_AGG' + upper(qry_type) + '_FRESHNESS' from v_daily_aggregates
 where date > current_date - 3
 group by qry_type ;
 `;
 
-// TODO: check if 2 it's the right number of days for lookback window
-// TODO: add the column ei_accept_state_date to funnel_facts
-const funnel_facts = `with
-
-ff_revenue as (select max(ei_accept_state_date) max_ei from fact_revenue where ei_accept_state_date >= sysdate - 2),
-
-ff as (select max(ei_accept_state_date) max_ff_ei from funnel_facts where ei_accept_state_date)
-
-select 'funnel_facts' as entity, DATEDIFF(MINUTE,max_ff_ei, max_ei) as value, 'FUNNEL_FACTS_FRESHNESS' as metric
-from ff_revenue join ff on true=true;
+const funnel_facts_fact_revenue = `select 'funnel_facts_revenue' as entity,
+  DATEDIFF(MINUTE, max(ei_accept_state_date),sysdate) as value, 'FUNNEL_FACTS__REVENUE_FRESHNESS' as metric from 
+  funnel_facts where ei_accept_state_date >= sysdate - 2 ;
 `;
 
 
@@ -37,5 +30,5 @@ module.exports = {
     clickouts:  clickouts,
     earnings: earnings,
     aggregations: aggregations,
-    funnel_facts: funnel_facts
+    funnel_facts_revenue: funnel_facts_fact_revenue
 };
