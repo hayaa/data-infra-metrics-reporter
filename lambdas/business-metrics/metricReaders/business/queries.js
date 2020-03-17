@@ -21,7 +21,7 @@ group by qry_type ;
 
 const funnel_facts_revenue = `with
 ernie as (select max(instancerows_accept_state_date) max_ei from earnings_inputs where instancerows_accept_state_date >= sysdate - 2),
-ff as (select max(ei_accept_state_date) max_ff_ei from funnel_facts where ei_accept_state_date)
+ff as (select max(ei_accept_state_date) max_ff_ei from funnel_facts where ei_accept_state_date >= sysdate - 2)
 select ‘funnel_facts’ as entity, DATEDIFF(MINUTE,max_ff_ei, max_ei) as value, ‘FUNNEL_FACTS_FRESHNESS’ as metric
 from ernie join ff on true=true`;
 
