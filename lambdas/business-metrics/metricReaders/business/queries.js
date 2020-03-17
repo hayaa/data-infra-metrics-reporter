@@ -19,15 +19,17 @@ where date > current_date - 3
 group by qry_type ;
 `;
 
-const funnel_facts_revenue = `select 'funnel_facts_revenue' as entity,
-  DATEDIFF(MINUTE, max(ei_accept_state_date),sysdate) as value, 'FUNNEL_FACTS_REVENUE_FRESHNESS' as metric from 
-  funnel_facts where ei_accept_state_date >= sysdate - 2 ;
-`;
+const funnel_facts_revenue = `with
+ernie as (select max(instancerows_accept_state_date) max_ei from earnings_inputs where instancerows_accept_state_date >= sysdate - 2),
+ff as (select max(ei_accept_state_date) max_ff_ei from funnel_facts where ei_accept_state_date)
+select ‘funnel_facts’ as entity, DATEDIFF(MINUTE,max_ff_ei, max_ei) as value, ‘FUNNEL_FACTS_FRESHNESS’ as metric
+from ernie join ff on true=true`;
 
 const funnel_facts_conversion = `select 'funnel_facts_conversion' as entity,
   DATEDIFF(MINUTE, max(conversion_timestamp),sysdate) as value, 'FUNNEL_FACTS_CONVERSION_FRESHNESS' as metric from 
   funnel_facts where conversion_timestamp >= sysdate - 2 ;
 `;
+
 
 module.exports = {
     impressions: impressions,
