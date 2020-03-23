@@ -4,7 +4,7 @@ const QUERIES = require('./metricReaders/business/queries');
 const MetricsWriter = require("./metricsWriter");
 const businessMetricWriter = new MetricsWriter("business_metrics");
 
-const READERS = Object.values(QUERIES).map(queryEntity => getReaderForQuery(queryEntity));
+const READERS = Object.entries(QUERIES).map(queryEntity => getReaderForQuery(queryEntity));
 
 exports.handler = async function (event = {}, context) {
     const {metric = 'SitesTraffic'} = event;
@@ -17,10 +17,11 @@ exports.handler = async function (event = {}, context) {
 
             console.info(`INFO data for ${readerName}`);
 
-            const data = await reader[1].read();
+            const data = await reader[1].read;
 
             console.info(`INFO data for ${readerName}`, data);
 
+            console.info(`"INFO FOR: ${reader}"`);
             let result = await reader[1].write.writeBusinessMetrics(data);
 
             console.info(`INFO done for ${readerName}`, result);
